@@ -1,0 +1,9 @@
+[submodule "Libs/wa1470"]
+	path = Libs/wa1470
+	url = https://github.com/SergeiSOficial/wa1470
+[submodule "Libs/BME280_driver"]
+	path = Libs/BME280_driver
+	url = https://github.com/SergeiSOficial/BME280_driver.git
+[submodule "libs/embedded-i2c-sgp40"]
+	path = libs/embedded-i2c-sgp40
+	url = ../../SergeiSOficial/embedded-i2c-sgp40
