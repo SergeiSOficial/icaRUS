@@ -8,17 +8,24 @@
  * \copyright WAVIoT 2020
  *
  */
+
 #include "WVT_BME280.h"
 #include "bme280.h"
 #include "gpio.h"
-#include "rtc.h"
-#include "scheduler_hal.h"
 #include "spi.h"
-#include <stdio.h>
-#include "water7.h"
 
-struct bme280_dev DevBME280;
-uint32_t Req_delay;
+
+/**
+ * @brief BME280 Device struct
+ * 
+ */
+static struct bme280_dev DevBME280;
+
+/**
+ * @brief requested delay between command and result of data
+ * 
+ */
+static uint32_t Req_delay;
 
 void user_delay_us(uint32_t period, void *intf_ptr)
 {
@@ -26,7 +33,7 @@ void user_delay_us(uint32_t period, void *intf_ptr)
      * Return control or wait,
      * for a period amount of milliseconds
      */
-    LL_mDelay(1+period/1000);
+    LL_mDelay(1+period/MS_IN_SECOND);
 }
 
 int8_t user_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr)
@@ -115,7 +122,6 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
     Req_delay = bme280_cal_meas_delay(&dev->settings);
 
     //printf("Temperature, Pressure, Humidity\r\n");
-    /* Continuously stream sensor data */
 
     rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, dev);
     /* Wait for the measurement to complete and print data @25Hz */
@@ -126,6 +132,11 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
     return rslt;
 }
 
+/**
+ * @brief Init BME280 sensor
+ * 
+ * @return int8_t return BME280_OK if all ok
+ */
 int8_t WVT_BME280_Init(void)
 {
     SPI_Activate();
@@ -148,6 +159,14 @@ int8_t WVT_BME280_Init(void)
     return rslt;
 }
 
+/**
+ * @brief Get data from BME280
+ * 
+ * @param temp temperature/100 in Celsius
+ * @param hum relative humidity /1000
+ * @param press pressure
+ * @return int8_t return BME280_OK if all ok
+ */
 int8_t WVT_BME280_GetData(int32_t* temp, uint32_t* hum, uint32_t* press)
 {
     int8_t rslt = BME280_OK;
@@ -155,14 +174,12 @@ int8_t WVT_BME280_GetData(int32_t* temp, uint32_t* hum, uint32_t* press)
     rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &DevBME280);
     /* Wait for the measurement to complete and print data @25Hz */
     DevBME280.delay_us(Req_delay, DevBME280.intf_ptr);
-    DevBME280.delay_us(40000, DevBME280.intf_ptr);
+    DevBME280.delay_us(40000, DevBME280.intf_ptr);//extra delay
     rslt |= bme280_get_sensor_data(BME280_ALL, &comp_data, &DevBME280);
     print_sensor_data(&comp_data);
     *temp = comp_data.temperature;
     *hum = comp_data.humidity;
     *press = comp_data.pressure;
-
-//    rslt |= bme280_set_sensor_mode(BME280_SLEEP_MODE, &DevBME280);
 
     return rslt;
 }

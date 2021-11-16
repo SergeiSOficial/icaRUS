@@ -44,9 +44,8 @@ int32_t water7save_data(int32_t *data)
 void get_saved_param(water7_params_str *water7_params_p, meter_params_str *meter_params_p)
 {
 	/// \todo check this
-	//water7get_data((int32_t *)water7_params_p);
 	WVT_EEPROM_LoadAll(water7_params_p, EEPROM_WATER7_PARAMS);
-  WVT_EEPROM_LoadAll(meter_params_p, EEPROM_METER_PARAMS);
+  	WVT_EEPROM_LoadAll(meter_params_p, EEPROM_METER_PARAMS);
 }
 
 int32_t update_write_cached(uint32_t addr, uint32_t len, uint8_t *data)

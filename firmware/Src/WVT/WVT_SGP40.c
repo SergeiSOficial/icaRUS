@@ -44,6 +44,11 @@
  * #define sleep(...)
  */
 
+/**
+ * @brief Init SGP40 Sensor
+ * 
+ * @return int16_t NO_ERROR if all ok 
+ */
 int16_t WVT_SGP40_Init(void)
 {
     volatile int16_t error = 0;
@@ -101,6 +106,15 @@ int16_t WVT_SGP40_Init(void)
     return error;
 }
 
+/**
+ * @brief Read SGP40 data
+ * 
+ * @param temp input for temperature
+ * @param hum input for humidity 
+ * @param ptrTvoc_ppb RAW data of VOC in ppm
+ * @param ptrCo2_eq_ppm not used
+ * @return int16_t NO_ERROR if all ok
+ */
 int16_t WVT_SGP40_Read(int32_t temp, uint32_t hum, uint16_t *ptrTvoc_ppb, uint16_t *ptrCo2_eq_ppm)
 {
     int16_t error = 0;

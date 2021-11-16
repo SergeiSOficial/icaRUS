@@ -354,7 +354,6 @@ void Water7OneSec(struct tm newTime)
     if (newTime.tm_min != oldTime.tm_min)
     {
 
-        meter_save_data();
         if (newTime.tm_hour != oldTime.tm_hour)
         {
             if (_get_data)
@@ -362,6 +361,7 @@ void Water7OneSec(struct tm newTime)
               _get_data(_state.parameters_array);
             }
 
+            meter_save_data();
             for (uint8_t i = 0; i < WATER7_PAR_COUNT - WATER7_PAR_OFFSET_NOT24; i++)
             {
                 if ((_state.parameters_array[WATER7_USERDATA_OFFSET + i] - _state.PrevMinute[i]) > _waterParams->par_max[i])

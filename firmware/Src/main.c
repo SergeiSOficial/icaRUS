@@ -104,7 +104,7 @@ void waterAndMeterInit(void)
 }
 
 /*!
- * \brief every second tick
+ * \brief every wakeup tick
  *
  * \param desc
  */
@@ -177,11 +177,11 @@ int main(void)
 
   //LL_PWR_EnableLowPowerRunMode();
 
-  GPIO_Wa1470_WriteCs(0);
-  SPI_Activate();
-  radio_init();
-  waterAndMeterInit();
-  scheduler_add_task(&everysec_desc, EverySec, RUN_CONTINUOSLY_RELATIVE, SECONDS(30));
+  GPIO_Wa1470_WriteCs(0);//ensure that we disable wa1470 chip select
+  SPI_Activate(); //enable SPI
+  radio_init(); //Init radio NB-Fi and timers
+  waterAndMeterInit(); // Init protocol for NB-Fi
+  scheduler_add_task(&everysec_desc, EverySec, RUN_CONTINUOSLY_RELATIVE, SECONDS(30)); //should not exceed 30 seconds, because need to reset the watchdog
 
   WVT_BME280_Init();
   WVT_SGP40_Init();
@@ -194,12 +194,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    scheduler_run_callbacks();
-    NBFI_Main_Level_Loop();
+    scheduler_run_callbacks();//need check timers
+    NBFI_Main_Level_Loop(); 
     IWDG_Refresh();
     if (NBFi_can_sleep() && scheduler_can_sleep() && Water7isCanSleep())
     {
-      GPIO_Wa1470_WriteCs(0);
+      GPIO_Wa1470_WriteCs(0); //disable chip select pin to ensure that no high level on input pin WA1470
       HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
     }
     //      HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);

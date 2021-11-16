@@ -4,11 +4,11 @@
 #include "WVT_EEPROM.h"
 
 #ifdef WA1470_LOG
-//#include "log.h"
+#include "log.h"
 #endif //WA1470_LOG
 
-uint32_t Voltage = 0;
-int32_t Temp = 0;
+static uint32_t Voltage = 0;
+static int32_t Temp = 0;
 
 static inline void nbfi_HAL_GPIO_Init()
 {
@@ -16,23 +16,14 @@ static inline void nbfi_HAL_GPIO_Init()
 
 static inline void nbfi_HAL_before_tx(nbfi_settings_t *nbfi)
 {
-  //  if (nbfi->tx_antenna == SMA)
-  //    HAL_GPIO_WritePin(WA_EXTANT_GPIO_Port, WA_EXTANT_Pin, GPIO_PIN_SET);
-  //  else
-  //    HAL_GPIO_WritePin(WA_EXTANT_GPIO_Port, WA_EXTANT_Pin, GPIO_PIN_RESET);
 }
 
 static inline void nbfi_HAL_before_rx(nbfi_settings_t *nbfi)
 {
-  //  if (nbfi->rx_antenna == SMA)
-  //    HAL_GPIO_WritePin(WA_EXTANT_GPIO_Port, WA_EXTANT_Pin, GPIO_PIN_SET);
-  //  else
-  //    HAL_GPIO_WritePin(WA_EXTANT_GPIO_Port, WA_EXTANT_Pin, GPIO_PIN_RESET);
 }
 
 static inline void nbfi_HAL_before_off(nbfi_settings_t *nbfi)
 {
-  //  HAL_GPIO_WritePin(WA_EXTANT_GPIO_Port, WA_EXTANT_Pin, GPIO_PIN_RESET);
 }
 
 static inline void nbfi_HAL_lock_unlock_loop_irq(uint8_t lock)
