@@ -251,7 +251,7 @@ void Water7Init(water7_params_str *params)
         memset((uint8_t *)_waterParams, 0, sizeof(water7_params_str));
 #endif
         /// \todo setup this on radio
-        _waterParams->send_flag = 0x1f;
+        _waterParams->send_flag = 0x0f;
         _waterParams->send_hour_flag = 0;
         _waterParams->period = ONEHOUR;
     }

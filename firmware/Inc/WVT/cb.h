@@ -6,7 +6,6 @@
 #include "meter.h"
 #include "water7.h"
 
-#define LED_BLINK_VOLUME 10000
 
 int32_t water7set_data(int32_t *data);
 int32_t water7get_data(int32_t *data);

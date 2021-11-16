@@ -34,5 +34,5 @@ EWARM/STM32L412k8u_boot.dep
 *.dep
 EWARM/STM32L412k8u_boot.ewp
 EWARM/.metadata
-/.vscode/c_cpp_properties.json
 /.vscode/iar-vsc.json
+/.vscode/c_cpp_properties.json

@@ -42,6 +42,7 @@ enum spi_device_state SpiDeviceState = SPI_DEVICE_NONE;
         * EXTI
         * Free pins are configured automatically as Analog (this feature is enabled through
         * the Code Generation settings)
+     PB1   ------> ADCx_IN16
 */
 void MX_GPIO_Init(void)
 {
@@ -80,7 +81,7 @@ void MX_GPIO_Init(void)
   LL_GPIO_Init(SPI1_BME_SEL_GPIO_Port, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_7;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_7;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);

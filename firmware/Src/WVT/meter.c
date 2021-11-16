@@ -11,10 +11,6 @@
 
 void (*_inc_cb)(void);
 
-#ifdef USE_HALL_METER
-static meter_state_str _state = {0};
-static meter_params_str _params = {0};
-#endif // USE_HALL_METER
 static meter_data_str _data = {0};
 
 
@@ -29,7 +25,7 @@ void meter_get(void *data, meter_get_set_enum type)
         WVT_BME280_GetData(&temp, &hum, &press);
         WVT_SGP40_Read(temp, hum, &tvoc_ppb, &co2_eq_ppm);
         _data.temp = temp;
-        _data.hum = hum;
+        _data.hum = hum;//"temp ",temp:%d, " hum:", hum:%d, "  press:", press:%d, " tvoc:", tvoc_ppb:%d
         _data.press = press;
         _data.tvoc = tvoc_ppb;
         _data.co2 = co2_eq_ppm;
@@ -40,11 +36,6 @@ void meter_get(void *data, meter_get_set_enum type)
         memcpy((uint8_t *)data, (uint8_t *)&_data, sizeof(meter_data_str));
 #endif
         break;
-#ifdef USE_HALL_METER
-    case METER_STATE:
-        memcpy_s((uint8_t *)data, (uint8_t *)&_state, sizeof(meter_state_str));
-        break;
-#endif
     default:
         break;
     }
@@ -62,11 +53,6 @@ void meter_set(void *data, meter_get_set_enum type)
             memcpy((uint8_t *)&_data, (uint8_t *)data, sizeof(meter_data_str));
 #endif
         break;
-#ifdef USE_HALL_METER
-    case METER_STATE:
-        memcpy_s((uint8_t *)&_state, (uint8_t *)data, sizeof(meter_state_str));
-        break;
-#endif
     default:
         break;
     }
@@ -93,18 +79,7 @@ void meter_save_data(void)
     WVT_EERPROM_WriteMeterData(&_data);
 }
 
-uint8_t MeterEverySecHandler(time_t timeNow)
-{
-    uint8_t errors = 0; //= LeakAndBreakCheckTimeVolumeTemp(MeterGetTotalVolumeMkl(), meter_GetParams(), timeNow);
-    MeterErrorHandler(errors);
-    return errors;
-}
-
-uint8_t MeterErrorGet(void)
-{
-    return _data.errors;
-}
-
 void MeterClearErrorsMask(void)
 {
+  _data.errors = 0;
 }

@@ -129,7 +129,7 @@ int32_t WVT_EEPROM_SaveAll(void *data, enum SettingsType type)
         /// \todo check this
         addr = (void *)oldData.nbfiSetting;
         size = SIZE_NBFI;
-        ((nbfi_settings_t *)data)->crc = CRC_Crc32((uint32_t *)data, size - sizeof(((nbfi_settings_t *)data)->crc), 0xFFFFFFFF);
+//        ((nbfi_settings_t *)data)->crc = CRC_Crc32((uint32_t *)data, size - sizeof(((nbfi_settings_t *)data)->crc), 0xFFFFFFFF);
         break;
     }
     case EEPROM_METER_PARAMS:

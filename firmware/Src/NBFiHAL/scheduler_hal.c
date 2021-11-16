@@ -1,6 +1,5 @@
 #include "scheduler_hal.h"
 #include "rtc.h"
-#include "tim.h"
 
 ischeduler_st *_scheduler = 0;
 
@@ -43,7 +42,7 @@ static inline void scheduler_HAL_loop_irq_enable(uint8_t chan)
 
 static inline void scheduler_HAL_loop_irq_disable(uint8_t chan)
 {
-    HAL_TIM6_DisableIt();
+//    HAL_TIM6_DisableIt();
 }
 
 static inline void scheduler_HAL_cc_set(uint8_t chan, uint16_t data)

@@ -42,7 +42,6 @@ extern "C" {
 #include "stm32l4xx_ll_pwr.h"
 #include "stm32l4xx_ll_dma.h"
 #include "stm32l4xx_ll_spi.h"
-#include "stm32l4xx_ll_tim.h"
 #include "stm32l4xx_ll_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -84,7 +83,6 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-#define BAIKAL_B
 
 #define HW_VERSION ((uint32_t)0)
 #define HW_SUB_VERSION ((uint32_t)1)
@@ -96,19 +94,12 @@ extern "C" {
   //#define BAND				UL864000_DL863500		//	KZ
   //#define BAND				UL458550_DL453750		//	UZ
 
-  //#define USE_EXTERNAL_RTC
-
 #define USE_WA1470
-  //#define PLOT_SPECTRUM
-  //#define NBFI_AT_SERVER
   //#define WA1470_LOG
 #define USE_EXTERNAL_RTC
 
 
-#define UPDATE_TEMPERATURE_PERIOD (1)
-
 #define SPI_TIMEOUT 50000
-#define UPDATE_DISPLAY_TIMEOUT (15)
 
 /*!
  * \brief milliseconds in seconds
@@ -116,10 +107,6 @@ extern "C" {
  */
 #define MS_IN_SECOND 1000
 
-/*!
- * \brief sub second counter
- */
-#define SUB_SECOND_MAX 256
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -148,9 +135,6 @@ void Error_Handler(void);
 #define SPI1_NSS_Pin LL_GPIO_PIN_6
 #define SPI1_NSS_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-  void SendErrors(uint8_t errors);
-  void SystemClock_Recover(void);
-  void SetWeCanSleep(bool enable);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

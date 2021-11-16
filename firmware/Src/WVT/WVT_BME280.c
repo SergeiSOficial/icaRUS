@@ -155,7 +155,7 @@ int8_t WVT_BME280_GetData(int32_t* temp, uint32_t* hum, uint32_t* press)
     rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &DevBME280);
     /* Wait for the measurement to complete and print data @25Hz */
     DevBME280.delay_us(Req_delay, DevBME280.intf_ptr);
-    DevBME280.delay_us(25000, DevBME280.intf_ptr);
+    DevBME280.delay_us(40000, DevBME280.intf_ptr);
     rslt |= bme280_get_sensor_data(BME280_ALL, &comp_data, &DevBME280);
     print_sensor_data(&comp_data);
     *temp = comp_data.temperature;

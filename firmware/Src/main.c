@@ -19,23 +19,17 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
 #include "crc.h"
 #include "i2c.h"
 #include "iwdg.h"
 #include "rtc.h"
 #include "spi.h"
-#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "cb.h"
-#include "libmfwtimer.h"
-#include "meter.h"
 #include "radio.h"
-#include "scheduler_hal.h"
-#include "water7.h"
 #include "WVT_BME280.h"
 #include "WVT_SGP40.h"
 /* USER CODE END Includes */
@@ -47,8 +41,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define TEST_LINK_SEND_PERIOD (60)
-#define TEST_LINK_TIMEOUT (2 * TEST_LINK_SEND_PERIOD)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -65,9 +57,8 @@ water7_params_str *Water7_params_p;
  * \todo check this
  */
 main_par_t main_par =
-    {
-        MODE_TEST,
-        //        DISPLAY_MODE_RUSSIA | DISPLAY_MODE_FLOW_OFF,
+{
+  MODE_TEST,0,0,0
 };
 /*!
  * \brief every second scheduler descriptor
@@ -119,8 +110,6 @@ void waterAndMeterInit(void)
  */
 void EverySec(struct scheduler_desc *desc)
 {
-    //  scheduler_add_task(desc, EverySec, RELATIVE, SECONDS(1));
-    //IWDG_Refresh();
     time_t timeNow = RTC_GetSeconds();
     Water7OneSec(RTC_GetTime());
 }
@@ -181,52 +170,40 @@ int main(void)
   MX_SPI1_Init();
   MX_IWDG_Init();
   MX_I2C1_Init();
-  MX_TIM6_Init();
-  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-    IWDG_Init();
-    /* Ensure that MSI is wake-up system clock */
-    LL_RCC_SetClkAfterWakeFromStop(LL_RCC_STOP_WAKEUPCLOCK_MSI);
-    //
-    /* 2 - Set Voltage scaling to Range 2  */
-    //LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
+  IWDG_Init();
+  /* Ensure that MSI is wake-up system clock */
+  LL_RCC_SetClkAfterWakeFromStop(LL_RCC_STOP_WAKEUPCLOCK_MSI);
 
-    LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
-    LL_LPM_EnableDeepSleep();
-    //LL_PWR_EnableLowPowerRunMode();
+  //LL_PWR_EnableLowPowerRunMode();
 
-   GPIO_Wa1470_WriteCs(0);
-   SPI_Activate();
-   radio_init();
-   waterAndMeterInit();
-   scheduler_add_task(&everysec_desc, EverySec, RUN_CONTINUOSLY_RELATIVE, SECONDS(30));
+  GPIO_Wa1470_WriteCs(0);
+  SPI_Activate();
+  radio_init();
+  waterAndMeterInit();
+  scheduler_add_task(&everysec_desc, EverySec, RUN_CONTINUOSLY_RELATIVE, SECONDS(30));
 
-
-    WVT_BME280_Init();
-    WVT_SGP40_Init();
+  WVT_BME280_Init();
+  WVT_SGP40_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    while (1)
-    {
+  while (1)
+  {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//        scheduler_irq();
-//        Alarm_Callback();
-
-      scheduler_run_callbacks();
-      NBFI_Main_Level_Loop();
-      IWDG_Refresh();
-      if (NBFi_can_sleep() && scheduler_can_sleep() && Water7isCanSleep())//(true) //
-      {
-                    GPIO_Wa1470_WriteCs(0);
-        //            GPIO_BME280_WriteCs(0);
-        HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-      }
-      HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    scheduler_run_callbacks();
+    NBFI_Main_Level_Loop();
+    IWDG_Refresh();
+    if (NBFi_can_sleep() && scheduler_can_sleep() && Water7isCanSleep())
+    {
+      GPIO_Wa1470_WriteCs(0);
+      HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
     }
+    //      HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+  }
   /* USER CODE END 3 */
 }
 
@@ -287,12 +264,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void SetWeCanSleep(bool enable)
-{
-    WeCanSleep = enable;
-}
-
 /* USER CODE END 4 */
 
 /**

@@ -27,7 +27,6 @@
 #include "i2c.h"
 #include "rtc.h"
 #include "spi.h"
-#include "tim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -248,20 +247,6 @@ void RTC_Alarm_IRQHandler(void)
   /* USER CODE BEGIN RTC_Alarm_IRQn 1 */
 
   /* USER CODE END RTC_Alarm_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM6 global interrupt.
-  */
-void TIM6_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM6_IRQn 0 */
-  LL_TIM_ClearFlag_UPDATE(TIM6);
-  HAL_TIM6_Callback();
-  /* USER CODE END TIM6_IRQn 0 */
-  /* USER CODE BEGIN TIM6_IRQn 1 */
-
-  /* USER CODE END TIM6_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

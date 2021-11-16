@@ -4,10 +4,6 @@
 #include "rtc.h"
 #include "update.h"
 
-extern uint8_t mode;
-//extern uint32_t blinks, update_blinks,
-extern uint32_t update_display;
-extern struct wtimer_desc led_desc;
 extern main_par_t main_par;
 
 uint32_t water7_rfl_patch0(uint32_t data);
@@ -204,29 +200,6 @@ int32_t water7_rfl(uint32_t addr, uint32_t len, uint32_t index, uint8_t *data, u
 
 void meter_inc_cb(void)
 {
-	//	if (main_par.work_mode == MODE_TEST)
-	//	{
-	//		static uint32_t prev, mod;
-	//		meter_data_str meter_data;
-	//		meter_get(&meter_data, METER_DATA);
-	//
-	//		if (meter_data.microliter[METER_FLOW_FORWARD] >= prev)
-	//			mod += meter_data.microliter[METER_FLOW_FORWARD] - prev;
-	//		else
-	//			mod += meter_data.microliter[METER_FLOW_FORWARD] + (1000000 - prev);
-	//		prev = meter_data.microliter[METER_FLOW_FORWARD];
-	//
-	//		// if (mod > LED_BLINK_VOLUME)
-	//		// {
-	//		// 	mod -= LED_BLINK_VOLUME;
-	//		// 	update_blinks = 1;
-	//		// 	blinks++;
-	//		// }
-	//	}
-	//	// if (update_display >= UPDATE_DISPLAY_TIMEOUT)
-	//	// 	update_display = 0;
-	//	// else
-	//	// 	update_display = 1;
 }
 
 uint32_t water7_rfl_patch0(uint32_t data)
